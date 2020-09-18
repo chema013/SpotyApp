@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col">
+        <form autocomplete="off" (ngSubmit)="buscar(forma)" #forma="ngForm">
+
+            <div class="form-group row">
+                <input type="text" class="form-control" placeholder="Buscar Cancion" name="cancion" ngModel #cancion="ngModel" required>
+            </div>
+
+            <div class="form-group row">
+                <button type="submit" class="btn btn-outline-success btn-block">Buscar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<app-loading class="m-5" *ngIf="loading"></app-loading>
+
+<div class="row m-5" *ngIf="tracks.length > 0">
+    <div class="col">
+        <table class="table text-white">
+            <thead>
+                <tr>
+                    <th>Foto</th>
+                    <th>Album</th>
+                    <th>Canción</th>
+                    <th>Vista Previa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let track of tracks">
+                    <td>
+                        <img [src]="track.album.images | noimage" class="img-thumb">
+                    </td>
+                    <td> {{ track.album.name }} </td>
+                    <td> {{ track.name }} </td>
+                    <td>
+                        <!-- <audio [src]="track.preview_url" controls></audio> -->
+                        <!-- src="https://open.spotify.com/embed/track/3vAn0qZzdyuHamcrpkfiX3" -->
+                        <iframe [src]="track.uri | domseguro:'https://open.spotify.com/embed/'" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- <app-tarjetas *ngIf="!loading" [items]="artistas"></app-tarjetas> -->

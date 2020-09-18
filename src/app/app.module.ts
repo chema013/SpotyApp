@@ -21,6 +21,10 @@ import { NoimagePipe } from './pipes/noimage.pipe';
 import { TarjetasComponent } from './components/tarjetas/tarjetas.component';
 import { LoadingComponent } from './components/shared/loading/loading.component';
 import { DomseguroPipe } from './pipes/domseguro.pipe';
+import { BuscarComponent } from './components/buscar/buscar.component';
+
+// formularios
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -32,11 +36,13 @@ import { DomseguroPipe } from './pipes/domseguro.pipe';
     DomseguroPipe,
     NoimagePipe,
     TarjetasComponent,
-    LoadingComponent
+    LoadingComponent,
+    BuscarComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    FormsModule,
     RouterModule.forRoot( ROUTES, { useHash: true } )
   ],
   providers: [

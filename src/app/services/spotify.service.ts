@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { url } from '../../environments/environment';
 
 
 @Injectable({
@@ -8,16 +9,43 @@ import { map } from 'rxjs/operators';
 })
 export class SpotifyService {
 
+  // url = 'http://localhost:8080/token';
+  token: string;
+
   constructor( private http: HttpClient ) {
     console.log('Spotify service listo');
+    this.tokenClaro();
+  }
+
+  getToken(): any {
+    return this.http.get( url ).toPromise()
+      .then(res => res)
+      .catch(err => err.error);
+  }
+
+  async tokenClaro(): Promise<any> {
+    const token = await this.getToken();
+    // console.log(token.token.access_token);
+    this.token = token.token.access_token;
   }
 
   getQuery( query: string ): any {
     const url = `https://api.spotify.com/v1/${ query }`;
+    // console.log(this.token);
     const headers = new HttpHeaders({
-      Authorization: 'Bearer BQBWaZvJ7X0_qjHlgQ_oU5ZxqECvg78MYZ1eB2xRFuhnxWJ6pZBqIkt21a2jPkfWyx5gIvOApAeoi2D5IY8'
+      Authorization: `Bearer ${this.token}`
     });
-    return this.http.get(url, { headers });
+    try {
+      return this.http.get(url, { headers });
+    } catch (error) {
+      this.tokenClaro();
+      return this.http.get(url, { headers });
+    }
+  }
+
+  getTrack( track: string ): any {
+    return this.getQuery(`search?q=${ track }&type=track&market=mx&limit=5`)
+              .pipe( map( data => data['tracks'].items ));
   }
 
   getNewReleases(): any{
